@@ -14,4 +14,4 @@ INFO_PANEL_FONT_SIZE = 30
 LEVEL_TO_WINDOW_WIDTH_RATIO = 0.8
 LEVEL_TO_WINDOW_HEIGHT_RATIO = 0.94
 
-LEVELS = ['sandbox_level_1.txt', 'pricey_test.txt']
+LEVELS = ['sandbox_learning_the_game.txt', 'pricey_level_1.txt']

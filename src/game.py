@@ -146,7 +146,7 @@ class Game:
         # Tick button
         tick_button_x = self.level_width
         tick_button_y = self.info_panel_height
-        tick_button = SolidColorPushButton(tick_button_x, tick_button_y, button_width, button_height, self.level.tick,
+        tick_button = SolidColorPushButton(tick_button_x, tick_button_y, button_width, button_height, self.tick_level,
                                            self.window, color.blue, color.dark_blue, color.dark_blue, 'Tick')
         tick_button_coords = ((tick_button_x, tick_button_y), (tick_button_x + button_width, tick_button_y + button_height))
         self.buttons[tick_button_coords] = tick_button
@@ -226,6 +226,15 @@ class Game:
         quit()
 
     # ------------------------------------------------------------------------------------------------- #
+
+    def tick_level(self) -> None:
+        """
+        Ticks the level.
+        :return: None
+        """
+
+        if not self.is_ticking:
+            self.level.tick()
 
     def toggle_show_desired(self) -> None:
         """
