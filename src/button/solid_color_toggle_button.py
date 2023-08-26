@@ -1,6 +1,8 @@
 import pygame
 
 from src.button.toggle_button import ToggleButton
+import src.constant.constant as const
+import src.constant.color as color
 
 
 class SolidColorToggleButton(ToggleButton):
@@ -11,7 +13,7 @@ class SolidColorToggleButton(ToggleButton):
     def __init__(self, x: int, y: int, width: int, height: int,
                  func: callable, window: pygame.Surface,
                  color: tuple[int, int, int], color_toggled: tuple[int, int, int],
-                 text: str = 'Temp', font: str = 'comicsans') -> None:
+                 text: str = 'Temp') -> None:
         """
         :param x: int, the x position of the button.
         :param y: int, the width of the button.
@@ -22,13 +24,11 @@ class SolidColorToggleButton(ToggleButton):
         :param color: tuple[int, int, int], the color of the button.
         :param color_toggled: tuple[int, int, int], the color of the button when toggled.
         :param text: str, the text to be displayed on the button.
-        :param font: str, the font of the text (must be a font that pygame can render).
         """
 
         self.color = color
         self.color_toggled = color_toggled
         self.text = text
-        self.font = font
 
         super().__init__(x, y, width, height, func, window)
 
@@ -38,7 +38,7 @@ class SolidColorToggleButton(ToggleButton):
         :return: None
         """
 
-        text = pygame.font.SysFont(self.font, 30).render(self.text, 1, (0, 0, 0))
+        text = pygame.font.SysFont(const.BUTTON_FONT, const.BUTTON_FONT_SIZE).render(self.text, 1, color.black)
 
         self.image = pygame.Surface((self.width, self.height))
         self.image.fill(self.color)

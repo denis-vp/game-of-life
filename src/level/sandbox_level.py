@@ -100,9 +100,9 @@ class SandboxLevel(Level):
 
     # ------------------------------------------------------------------------------------------------- #
 
-    def draw(self) -> None:
+    def draw_current(self) -> None:
         """
-        Draws the level on the screen.
+        Draws the current state of the level on the screen.
         :return: None
         """
 
@@ -112,6 +112,43 @@ class SandboxLevel(Level):
             for col in range(self.nr_cols):
                 # Get the cell state
                 cell_state = self.current_state[row * self.nr_cols + col]
+                if cell_state == 0:
+                    self.window.blit(self.dead_cell_image, (cell_x, cell_y))
+                else:
+                    self.window.blit(self.alive_cell_image, (cell_x, cell_y))
+
+                # Move to the next cell
+                cell_x += self.cell_width
+
+            # Move to the next row
+            cell_x = self.x
+            cell_y += self.cell_height
+
+        # Draw the level's cells' borders
+        cell_x, cell_y = self.x, self.y
+        for row in range(self.nr_rows + 1):
+            pygame.draw.line(self.window, color.black, (cell_x, cell_y),
+                             (cell_x + self.nr_cols * self.cell_width, cell_y))
+            cell_y += self.cell_height
+
+        cell_x, cell_y = self.x, self.y
+        for col in range(self.nr_cols + 1):
+            pygame.draw.line(self.window, color.black, (cell_x, cell_y),
+                             (cell_x, cell_y + self.nr_rows * self.cell_height))
+            cell_x += self.cell_width
+
+    def draw_desired(self) -> None:
+        """
+        Draws the desired state of the level on the screen.
+        :return: None
+        """
+
+        # Draw the cells
+        cell_x, cell_y = self.x, self.y
+        for row in range(self.nr_rows):
+            for col in range(self.nr_cols):
+                # Get the cell state
+                cell_state = self.desired_state[row * self.nr_cols + col]
                 if cell_state == 0:
                     self.window.blit(self.dead_cell_image, (cell_x, cell_y))
                 else:

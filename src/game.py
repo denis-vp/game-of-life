@@ -8,6 +8,7 @@ from src.button.toggle_button import ToggleButton
 from src.error import GameError
 import src.constant.constant as const
 import src.constant.color as color
+from src.level.sandbox_level import SandboxLevel
 
 
 class Game:
@@ -50,7 +51,10 @@ class Game:
         self.window = None
         self.clock = None
 
-        self.level_x, self.level_y = None, None
+        self.info_panel_height = self.height - int(self.height * const.LEVEL_TO_WINDOW_HEIGHT_RATIO)
+        self.info_panel_text = None
+
+        self.level_x, self.level_y = 0, self.info_panel_height
         self.level_width, self.level_height = None, None
 
         self.ready_window()
@@ -78,23 +82,28 @@ class Game:
         :raises: GameError if the level type is invalid.
         """
 
-        self.level_x, self.level_y = 0, 0
-        self.level_width, self.level_height = int(self.width * const.LEVEL_TO_WINDOW_RATIO), self.height
+        self.level_width = int(self.width * const.LEVEL_TO_WINDOW_WIDTH_RATIO)
+        self.level_height = int(self.height * const.LEVEL_TO_WINDOW_HEIGHT_RATIO)
 
         level_file_name = self.levels[self.level_index]
         level_file_path = os.path.join(self.data_dir_path, level_file_name)
         level_assets_dir_path = os.path.join(self.assets_dir_path, 'level')
 
-        level_type = level_file_name.split('.')[0].split('_')[0].lower()
+        file_name_tokens = level_file_name.split('.')[0].split('_')
+        level_type = file_name_tokens[0].lower()
+        level_name = ' '.join(file_name_tokens[1:]).title()
+
         if level_type == 'sandbox':
             from src.level.sandbox_level import SandboxLevel
             self.level = SandboxLevel(self.level_x, self.level_y, self.level_width, self.level_height,
                                       level_file_path, level_assets_dir_path, self.window)
+            self.info_panel_text = f'{level_name} - Sandbox: No special rules. No goal.'
 
-        elif level_type == 'normal':
-            from src.level.normal_level import NormalLevel
-            self.level = NormalLevel(self.level_x, self.level_y, self.level_width, self.level_height,
+        elif level_type == 'pricey':
+            from src.level.pricey_level import PriceyLevel
+            self.level = PriceyLevel(self.level_x, self.level_y, self.level_width, self.level_height,
                                      level_file_path, level_assets_dir_path, self.window)
+            self.info_panel_text = f'{level_name} - Pricey: Limited number of toggles.'
 
         else:
             raise GameError('Invalid level type!')
@@ -111,7 +120,7 @@ class Game:
 
         self.level_index += 1
         if self.level_index == len(self.levels):
-            raise GameError('No more levels to play!')
+            self.level_index = 0
         self.ready_level()
 
     def reset_level(self) -> None:
@@ -132,19 +141,27 @@ class Game:
         """
 
         button_width = self.width - self.level_width
-        button_height = self.height // 8
+        button_height = self.level_height // 8
 
         # Tick button
         tick_button_x = self.level_width
-        tick_button_y = 0
+        tick_button_y = self.info_panel_height
         tick_button = SolidColorPushButton(tick_button_x, tick_button_y, button_width, button_height, self.level.tick,
                                            self.window, color.blue, color.dark_blue, color.dark_blue, 'Tick')
         tick_button_coords = ((tick_button_x, tick_button_y), (tick_button_x + button_width, tick_button_y + button_height))
         self.buttons[tick_button_coords] = tick_button
 
+        # Goal button
+        goal_button_x = self.level_width
+        goal_button_y = self.info_panel_height + button_height
+        goal_button = SolidColorToggleButton(goal_button_x, goal_button_y, button_width, button_height, self.toggle_show_desired,
+                                             self.window, color.plum, color.purple, 'Show Goal')
+        goal_button_coords = ((goal_button_x, goal_button_y), (goal_button_x + button_width, goal_button_y + button_height))
+        self.buttons[goal_button_coords] = goal_button
+
         # Advance button
         advance_button_x = self.level_width
-        advance_button_y = button_height
+        advance_button_y = self.info_panel_height + button_height * 2
         advance_button = SolidColorToggleButton(advance_button_x, advance_button_y, button_width, button_height, self.toggle_advancing,
                                                 self.window, color.red, color.dark_red, 'Advance')
         advance_button_coords = ((advance_button_x, advance_button_y), (advance_button_x + button_width, advance_button_y + button_height))
@@ -152,7 +169,7 @@ class Game:
 
         # Reset button
         reset_button_x = self.level_width
-        reset_button_y = button_height * 2
+        reset_button_y = self.info_panel_height + button_height * 3
         reset_button = SolidColorPushButton(reset_button_x, reset_button_y, button_width, button_height, self.reset_level,
                                             self.window, color.yellow, color.orange, color.orange, 'Reset')
         reset_button_coords = ((reset_button_x, reset_button_y), (reset_button_x + button_width, reset_button_y + button_height))
@@ -160,7 +177,7 @@ class Game:
 
         # Next level button
         next_level_button_x = self.level_width
-        next_level_button_y = button_height * 3
+        next_level_button_y = self.info_panel_height + button_height * 4
         next_level_button = SolidColorPushButton(next_level_button_x, next_level_button_y, button_width, button_height, self.next_level,
                                                  self.window, color.green, color.dark_green, color.dark_green, 'Next Level')
         next_level_button_coords = ((next_level_button_x, next_level_button_y), (next_level_button_x + button_width, next_level_button_y + button_height))
@@ -210,6 +227,16 @@ class Game:
 
     # ------------------------------------------------------------------------------------------------- #
 
+    def toggle_show_desired(self) -> None:
+        """
+        Toggles the show_desired flag.
+        :return: None
+        """
+
+        # Check if the level is a sandbox level
+        if not type(self.level) == SandboxLevel:
+            self.level.show_desired = not self.level.show_desired
+
     def toggle_advancing(self) -> None:
         """
         Sets the is_ticking flag.
@@ -248,7 +275,7 @@ class Game:
 
         # Check if the level was clicked
         if x_pos < self.level_width:
-            if not self.is_ticking:
+            if not self.is_ticking and not self.level.show_desired:
                 self.level.handle_mouse_click(x_pos, y_pos)
             return
 
@@ -275,6 +302,19 @@ class Game:
         """
 
         self.window.fill(color.white)
+
+        # Draw the info panel
+        info_panel_rect = pygame.Rect(0, 0, self.width, self.info_panel_height)
+        pygame.draw.rect(self.window, color.peru, info_panel_rect)
+
+        text = pygame.font.SysFont(const.INFO_PANEL_FONT, const.INFO_PANEL_FONT_SIZE).render(self.info_panel_text, True, color.white)
+        text_rect = text.get_rect()
+        text_rect.x = 5
+        text_rect.y = info_panel_rect.height // 2 - text_rect.height // 2
+
+        self.window.blit(text, text_rect)
+
+        # Draw the objects
         self.level.draw()
         for button in self.buttons.values():
             button.draw()

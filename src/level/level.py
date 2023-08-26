@@ -32,8 +32,10 @@ class Level(ABC):
         self.nr_rows, self.nr_cols = None, None
         self.load_data()
 
+        self.show_desired = False
         self.cell_width, self.cell_height = None, None
         self.alive_cell_image, self.dead_cell_image = None, None
+
         self.load_assets()
 
     # ------------------------------------------------------------------------------------------------- #
@@ -144,10 +146,30 @@ class Level(ABC):
 
     # ------------------------------------------------------------------------------------------------- #
 
-    @abstractmethod
     def draw(self) -> None:
         """
         Draws the level on the given surface.
+        :return: None
+        """
+
+        if self.show_desired:
+            self.draw_desired()
+        else:
+            self.draw_current()
+
+    @abstractmethod
+    def draw_current(self) -> None:
+        """
+        Draws the current state of the level on the given surface.
+        :return: None
+        """
+
+        pass
+
+    @abstractmethod
+    def draw_desired(self) -> None:
+        """
+        Draws the desired state of the level on the given surface.
         :return: None
         """
 

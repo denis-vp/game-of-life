@@ -4,9 +4,9 @@ import src.constant.color as color
 from src.level.sandbox_level import SandboxLevel
 
 
-class NormalLevel(SandboxLevel):
+class PriceyLevel(SandboxLevel):
     """
-    Class for a normal level.
+    Class for a pricey level.
     Represents the playing field for Conway's Game of Life.
     There are a limited number of toggles available.
     """
@@ -104,13 +104,13 @@ class NormalLevel(SandboxLevel):
 
     # ------------------------------------------------------------------------------------------------- #
 
-    def __copy__(self) -> 'NormalLevel':
+    def __copy__(self) -> 'PriceyLevel':
         """
         Returns a shallow copy of the level.
-        :return: NormalLevel, the shallow copy of the level.
+        :return: PriceyLevel, the shallow copy of the level.
         """
 
-        copy = NormalLevel(self.x, self.y, self.width, self.height, self.data_file, self.assets_dir_path, self.window)
+        copy = PriceyLevel(self.x, self.y, self.width, self.height, self.data_file, self.assets_dir_path, self.window)
 
         copy.max_toggles = self.max_toggles
         copy.nr_toggles = self.nr_toggles
@@ -122,14 +122,14 @@ class NormalLevel(SandboxLevel):
 
         return copy
 
-    def __deepcopy__(self, memodict={}) -> 'NormalLevel':
+    def __deepcopy__(self, memodict={}) -> 'PriceyLevel':
         """
         Returns a deep copy of the level.
         :param memodict: dict, the memo dictionary.
-        :return: NormalLevel, the deep copy of the level.
+        :return: PriceyLevel, the deep copy of the level.
         """
 
-        copy = NormalLevel(self.x, self.y, self.width, self.height, self.data_file, self.assets_dir_path, self.window)
+        copy = PriceyLevel(self.x, self.y, self.width, self.height, self.data_file, self.assets_dir_path, self.window)
 
         copy.max_toggles = self.max_toggles
         copy.nr_toggles = self.nr_toggles
