@@ -10,7 +10,7 @@ Welcome to the Conway's Game of Life implementation in Pygame! This repository p
 <div align="center">
     <img src="examples/Gospers_glider_gun.gif" width="500" alt="Gospel's Glider Gun">
 </div>
-<figcaption align="center">A single Gosper's glider gun creating gliders</figcaption>
+<div align="center">A single Gosper's glider gun creating gliders</div>
 
 ---
 
@@ -50,7 +50,7 @@ Here are some examples of patterns that can emerge in the Game of Life:
     <img src="examples/boat.png" width="200" alt="Boat">
     <img src="examples/tub.png" width="200" alt="Tub">
    </div>
-   <figcaption align="center">Boat and Tub - Still Life</figcaption>
+   <div align="center">Boat and Tub - Still Life</div>
    <br>
 
 2. **Oscillators:** Patterns that repeat after a certain number of generations.
@@ -59,7 +59,7 @@ Here are some examples of patterns that can emerge in the Game of Life:
     <img src="examples/Game_of_life_toad.gif" width="200" alt="Toad">
     <img src="examples/Game_of_life_pulsar.gif" width="200" alt="Pulsar">
    </div>
-   <figcaption align="center">Toad and Pulsar - Oscillators</figcaption>
+   <div align="center">Toad and Pulsar - Oscillators</div>
    <br>
 
 3. **Spaceships:** Patterns that move across the grid.
@@ -68,7 +68,7 @@ Here are some examples of patterns that can emerge in the Game of Life:
     <img src="examples/Game_of_life_animated_LWSS.gif" width="200" height="200" alt="Light-weight spaceship(LWSS)">
     <img src="examples/Animated_Hwss.gif" width="200" height="200" alt="Heavy-weight spaceship(HWSS)">
    </div>
-   <figcaption align="center">Light and Heavy weight - Spaceships</figcaption>
+   <div align="center">Light and Heavy weight - Spaceships</div>
    <br>
 
 4. **Glider:** A common spaceship that moves diagonally.
@@ -76,7 +76,7 @@ Here are some examples of patterns that can emerge in the Game of Life:
     <br>
     <img src="examples/Game_of_life_animated_glider.gif" width="200" alt="Glider">
    </div>
-   <figcaption align="center">Glider - Common Spaceship</figcaption>
+   <div align="center">Glider - Common Spaceship</div>
 
 ## Features
 
